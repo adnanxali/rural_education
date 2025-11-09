@@ -1,24 +1,33 @@
 jest.mock('axios');
 import { render, screen, fireEvent } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
 import Signup from "../component/Signup";
 import "@testing-library/jest-dom";
 
 describe("Signup Component Tests", () => {
 
   test("renders signup fields", () => {
-    render(<Signup />);
+    render(
+      <BrowserRouter>
+        <Signup />
+      </BrowserRouter>
+    );
 
-    expect(screen.getByPlaceholderText(/username/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/email/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/password/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/enter your name/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/enter your email/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/enter your password/i)).toBeInTheDocument();
   });
 
   test("allows input", () => {
-    render(<Signup />);
+    render(
+      <BrowserRouter>
+        <Signup />
+      </BrowserRouter>
+    );
 
-    const username = screen.getByPlaceholderText(/username/i);
-    const email = screen.getByPlaceholderText(/email/i);
-    const password = screen.getByPlaceholderText(/password/i);
+    const username = screen.getByPlaceholderText(/enter your name/i);
+    const email = screen.getByPlaceholderText(/enter your email/i);
+    const password = screen.getByPlaceholderText(/enter your password/i);
 
     fireEvent.change(username, { target: { value: "teacher1" } });
     fireEvent.change(email, { target: { value: "teacher@gmail.com" } });
