@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG to PNG Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .output {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .image-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <h1>SVG to PNG Converter</h1>
+    <p>Click the button below to convert all SVG files to PNG:</p>
+    <button id="convertBtn">Convert SVG to PNG</button>
+    <div class="output" id="output"></div>
+
+    <script>
+        const svgFiles = [
+            'assets/svg/astronaut.svg',
+            'assets/svg/pirate.svg',
+            'assets/svg/wizard.svg',
+            'assets/svg/star.svg',
+            'assets/svg/heart.svg',
+            'assets/svg/correct.svg',
+            'assets/svg/wrong.svg'
+        ];
+
+        const outputDiv = document.getElementById('output');
+        const convertBtn = document.getElementById('convertBtn');
+
+        convertBtn.addEventListener('click', convertAllSvgToPng);
+
+        function convertAllSvgToPng() {
+            outputDiv.innerHTML = '';
+            svgFiles.forEach(svgFile => {
+                convertSvgToPng(svgFile);
+            });
+        }
+
+        function convertSvgToPng(svgFile) {
+            fetch(svgFile)
+                .then(response => response.text())
+                .then(svgText => {
+                    const fileName = svgFile.split('/').pop().replace('.svg', '');
+                    
+                    // Create a container for this image
+                    const container = document.createElement('div');
+                    container.className = 'image-container';
+                    
+                    // Create an image from the SVG
+                    const img = new Image();
+                    const svg = new Blob([svgText], {type: 'image/svg+xml'});
+                    const url = URL.createObjectURL(svg);
+                    
+                    img.onload = function() {
+                        // Create a canvas to draw the image
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 100;
+                        canvas.height = 100;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, 100, 100);
+                        
+                        // Convert canvas to PNG
+                        const pngUrl = canvas.toDataURL('image/png');
+                        
+                        // Create a download link
+                        const downloadLink = document.createElement('a');
+                        downloadLink.href = pngUrl;
+                        downloadLink.download = `${fileName}.png`;
+                        downloadLink.textContent = `Download ${fileName}.png`;
+                        
+                        // Create a preview image
+                        const previewImg = new Image();
+                        previewImg.src = pngUrl;
+                        previewImg.width = 100;
+                        previewImg.height = 100;
+                        
+                        // Add elements to the container
+                        container.appendChild(previewImg);
+                        container.appendChild(document.createElement('br'));
+                        container.appendChild(downloadLink);
+                        
+                        // Add container to output
+                        outputDiv.appendChild(container);
+                    };
+                    
+                    img.src = url;
+                })
+                .catch(error => {
+                    console.error(`Error loading SVG file ${svgFile}:`, error);
+                });
+        }
+    </script>
+</body>
+</html> 

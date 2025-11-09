@@ -23,6 +23,7 @@ const Navbar = () => {
           <Link to='/home' className="text-xl font-bold text-gray-900 hover:bg-green-300 px-3 py-2 rounded-lg cursor-pointer">Home</Link>
           <Link className="text-xl font-bold text-gray-900 hover:bg-green-300 px-3 py-2 rounded-lg">About</Link>
           <Link className="text-xl font-bold text-gray-900 hover:bg-green-300 px-3 py-2 rounded-lg">Contact Us</Link>
+          <Link className="text-xl font-bold text-gray-900 hover:bg-green-300 px-3 py-2 rounded-lg">Math Test</Link>
           {/* {
             checkLogin
           } */}
